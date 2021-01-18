@@ -1,28 +1,34 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div v-if="check">
+      If you see this, you are ready to continue.<br/>
+
+      Delete the contents of the div#app element and continue with the project.
+    </div>
+    <div v-else>
+      Something did not work as expected, troubleshoot time ...
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  data() {
+    return {
+      check: false,
+    }
+  },
+  mounted() {
+    axios.get('http://localhost:3000/')
+      .then(() => {
+        this.check = true
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
