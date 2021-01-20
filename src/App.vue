@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <div v-if="check">
-      If you see this, you are ready to continue.<br/>
-
-      Delete the contents of the div#app element and continue with the project.
-    </div>
-    <div v-else>
-      Something did not work as expected, troubleshoot time ...
+    <div v-for="film in films" :key="film.id">
+      <span>{{ film.episode_id }}</span>
+      <span>{{ film.title }}</span>
+      <span>{{ film.release_date }}</span>
+      <span>{{ film.director }}</span>
+      <span>{{ film.producer }}</span>
+      <span>{{ film.opening_crawl }}</span>
     </div>
   </div>
 </template>
@@ -18,16 +18,22 @@ export default {
   name: 'App',
   data() {
     return {
-      check: false,
+      loading: false,
+      films: [],
     }
   },
   mounted() {
-    axios.get('http://localhost:3000/')
-      .then(() => {
-        this.check = true
+    this.loading = true
+    axios.get('http://localhost:3000/swapi_films')
+      .then((response) => {
+        this.films = response.data
       })
       .catch(error => {
         console.log(error)
+      })
+      .finally(() => {
+        this.loading = false
+        
       })
   },
 }
