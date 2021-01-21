@@ -11,16 +11,17 @@
     <div v-for="film in films" :key="film.id" class="film">
       <span>{{ film.episode_id }}</span>
       <span>{{ film.title }}</span>
-      <span>{{ film.release_date }}</span>
+      <span>{{ getDate(film.release_date) }}</span>
       <span>{{ film.director }}</span>
       <span>{{ film.producer }}</span>
-      <span>{{ film.opening_crawl }}</span>
+      <span class="opening-crawl">{{ film.opening_crawl }}</span>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { format, parseISO } from 'date-fns'
 
 export default {
   name: 'App',
@@ -43,6 +44,11 @@ export default {
         this.loading = false
 
       })
+  },
+  methods: {
+    getDate(date) {
+      return format(parseISO(date), 'MMMM do, yyyy');
+    }
   },
 }
 </script>
@@ -81,5 +87,22 @@ export default {
   .film span:nth-of-type(6),
   .headers span:nth-of-type(6) {
     width: 50%;
+  }
+
+  .film {
+    margin-bottom: 10px;
+  }
+
+  .headers {
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+  }
+
+  .opening-crawl {
+    display: -webkit-inline-box !important;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
