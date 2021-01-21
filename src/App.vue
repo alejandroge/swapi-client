@@ -15,6 +15,14 @@
       <span>{{ film.director }}</span>
       <span>{{ film.producer }}</span>
       <span class="opening-crawl">{{ film.opening_crawl }}</span>
+      <div v-if="!film.photo_url">
+        <label :for="`photo_url${film.id}`">Photo URL: </label>
+        <input type="text" name="photo-url" :id="`photo_url${film.id}`" v-model="film.photo_url">
+        <button type="submit" @click="submitPhoto(film)">Save photo</button>
+      </div>
+      <div v-else>
+        <img :src="film.photo_url" alt="Poster" width="250">
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +56,12 @@ export default {
   methods: {
     getDate(date) {
       return format(parseISO(date), 'MMMM do, yyyy');
+    },
+    submitPhoto(film) {
+      axios.post(
+        `http://localhost:3000/swapi_films/${film.id}/submit_photo`,
+        {photo_url: film.photo_url}
+      );
     }
   },
 }
