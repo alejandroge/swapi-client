@@ -17,7 +17,7 @@
       <span class="opening-crawl">{{ film.opening_crawl }}</span>
       <div v-if="!film.photo_url">
         <label :for="`photo_url${film.id}`">Photo URL: </label>
-        <input type="text" name="photo-url" :id="`photo_url${film.id}`" v-model="film.photo_url">
+        <input type="text" name="photo-url" :id="`photo_url${film.id}`" v-model="photoUrls[film.id]">
         <button type="submit" @click="submitPhoto(film)">Save photo</button>
       </div>
       <div v-else>
@@ -37,6 +37,7 @@ export default {
     return {
       loading: false,
       films: [],
+      photoUrls: {}
     }
   },
   mounted() {
@@ -50,7 +51,6 @@ export default {
       })
       .finally(() => {
         this.loading = false
-
       })
   },
   methods: {
@@ -60,8 +60,12 @@ export default {
     submitPhoto(film) {
       axios.post(
         `http://localhost:3000/swapi_films/${film.id}/submit_photo`,
-        {photo_url: film.photo_url}
-      );
+        { photo_url: this.photoUrls[film.id] }
+      ).then(() => {
+        film.photo_url = this.photoUrls[film.id]
+      }).catch((error) => {
+        console.log(error)
+      });
     }
   },
 }
