@@ -6,7 +6,6 @@
       <span>Release Date</span>
       <span>Director</span>
       <span>Producer</span>
-      <span>Opening Crawl</span>
     </div>
     <div v-for="film in films" :key="film.id" class="film">
       <span>{{ film.episode_id }}</span>
@@ -14,14 +13,18 @@
       <span>{{ getDate(film.release_date) }}</span>
       <span>{{ film.director }}</span>
       <span>{{ film.producer }}</span>
-      <span class="opening-crawl">{{ film.opening_crawl }}</span>
-      <div v-if="!film.photo_url">
-        <label :for="`photo_url${film.id}`">Photo URL: </label>
-        <input type="text" name="photo-url" :id="`photo_url${film.id}`" v-model="photoUrls[film.id]">
-        <button type="submit" @click="submitPhoto(film)">Save photo</button>
-      </div>
-      <div v-else>
-        <img :src="film.photo_url" alt="Poster" width="250">
+      <div class="wrapper">
+        <div class="poster">
+          <template v-if="!film.photo_url">
+            <label :for="`photo_url${film.id}`">Photo URL: </label>
+            <input type="text" name="photo-url" :id="`photo_url${film.id}`" v-model="photoUrls[film.id]">
+            <button type="submit" @click="submitPhoto(film)">Save photo</button>
+          </template>
+          <img v-else :src="film.photo_url" alt="Poster" width="250">
+        </div>
+        <div class="opening-crawl">
+          {{ film.opening_crawl }}
+        </div>
       </div>
     </div>
   </div>
@@ -79,36 +82,32 @@ export default {
 
   .film span:nth-of-type(1),
   .headers span:nth-of-type(1) {
-    width: 10%;
+    width: 20%;
   }
 
   .film span:nth-of-type(2),
   .headers span:nth-of-type(2) {
-    width: 10%;
+    width: 20%;
   }
 
   .film span:nth-of-type(3),
   .headers span:nth-of-type(3) {
-    width: 10%;
+    width: 20%;
   }
 
   .film span:nth-of-type(4),
   .headers span:nth-of-type(4) {
-    width: 10%;
+    width: 20%;
   }
 
   .film span:nth-of-type(5),
   .headers span:nth-of-type(5) {
-    width: 10%;
-  }
-
-  .film span:nth-of-type(6),
-  .headers span:nth-of-type(6) {
-    width: 50%;
+    width: 20%;
   }
 
   .film {
     margin-bottom: 10px;
+    border-bottom: 1px solid black;
   }
 
   .headers {
@@ -122,5 +121,16 @@ export default {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 60%;
+  }
+
+  .poster {
+    width: 30%;
+  }
+
+  .wrapper {
+    margin: 10px 0px;
+    display: flex;
+    align-items: center;
   }
 </style>
